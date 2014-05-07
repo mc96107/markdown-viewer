@@ -9,9 +9,9 @@ body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	line-height: 20px;
-	margin: 0 auto;
+	margin: 0 5%;
 	padding-top: 30px;
-	width: 940px;
+	max-width: 940px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -100,7 +100,7 @@ code, pre {
 code {
 	background-color: #f7f7f9;
 	border: 1px solid #e1e1e8;
-	color: #444;
+	color: #d14;
 	padding: 2px 4px;
 }
 

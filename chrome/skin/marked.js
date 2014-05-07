@@ -970,8 +970,7 @@ Renderer.prototype.link = function(href, title, text) {
     else var out = '<a class="italicsf" href="' + '#' + '"'+ 'onclick=remoteStorage.mcnotes.readFile("'+href+'")';
     }
     else */ 
-	if(!href.match(urlPattern)) { href.split('.md').length<2 ? href=href+'.md' : 0; var out = '<a href="' + window.content.location.href.split('mcnotes/')[0]+"mcnotes/"+"mcnotes/"+ href + '" target="_blank"';}
-    else var out = '<a href="' + href + '" target="_blank"';
+    var out = '<a href="' + href + '" target="_blank"';
 
   if (title) {
     out += ' title="' + title + '"';

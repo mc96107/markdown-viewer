@@ -1,5 +1,7 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	<script type="application/x-javascript" src="chrome://markdown-viewer/content/marked.js"></script>
-	<script type="application/x-javascript" src="chrome://markdown-viewer/content/markdown-viewer.js"></script>
+	<script type="application/x-javascript" src="chrome://markdownviewer/content/markdownviewer.js"></script>
+	<script type="application/x-javascript" src="chrome://markdownviewer/content/marked.js"></script>
+	<script type="application/x-javascript" src="chrome://markdownviewer/content/jqmath-etc-0.4.0.min.js"></script>
 </overlay>
+
