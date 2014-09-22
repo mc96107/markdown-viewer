@@ -725,7 +725,7 @@ InlineLexer.prototype.output = function(src) {
     // math
     if (cap = this.rules.math.exec(src)) {
       src = src.substring(cap[0].length);
-      out += this.renderer.math(cap[1], 'math/tex', false); //FIXME: filter <script> & </script>
+      //out += katex.renderToString(cap); //FIXME: filter <script> & </script>
       continue;
     }
 
@@ -921,9 +921,8 @@ Renderer.prototype.tablecell = function(content, flags) {
   return tag + content + '</' + type + '>\n';
 };
 
-Renderer.prototype.math = function(content, language, display) {
-  mode = display ? '; mode=display' : '';
-  return '<script type="' + language + mode + '">' + content + '</script>';
+Renderer.prototype.math = function(content) {
+  return katex.renderToString(content);
 }
 
 // span level renderer
@@ -965,12 +964,14 @@ Renderer.prototype.link = function(href, title, text) {
     // (http|ftp|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?
     var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
     var datePattern = /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/;
+    var telPattern = /^tel:((?:[\+|\d][\d().-]*\d[\d().-]*|[0-9A-F*#().-]*[0-9A-F*#][0-9A-F*#().-]*(?:;[a-z\d-]+(?:=(?:[a-z\d\[\]\/:&+$_!~*'().-]|%[\dA-F]{2})+)?)*;phone-context=(?:\+[\d().-]*\d[\d().-]*|(?:[a-z0-9]\.|[a-z0-9][a-z0-9-]*[a-z0-9]\.)*(?:[a-z]|[a-z][a-z0-9-]*[a-z0-9])))(?:;[a-z\d-]+(?:=(?:[a-z\d\[\]\/:&+$_!~*'().-]|%[\dA-F]{2})+)?)*(?:,(?:\+[\d().-]*\d[\d().-]*|[0-9A-F*#().-]*[0-9A-F*#][0-9A-F*#().-]*(?:;[a-z\d-]+(?:=(?:[a-z\d\[\]\/:&+$_!~*'().-]|%[\dA-F]{2})+)?)*;phone-context=\+[\d().-]*\d[\d().-]*)(?:;[a-z\d-]+(?:=(?:[a-z\d\[\]\/:&+$_!~*'().-]|%[\dA-F]{2})+)?)*)*)$/;
     /*if(!href.match(urlPattern)) { href.split('.md').length<2 ? href=href+'.md' : 0;
     if (indxarr.indexOf(href)!=-1) var out = '<a href="' + '#' + '"'+ 'onclick=remoteStorage.mcnotes.readFile("'+href+'")';
     else var out = '<a class="italicsf" href="' + '#' + '"'+ 'onclick=remoteStorage.mcnotes.readFile("'+href+'")';
     }
     else */ 
-	if(!href.match(urlPattern)) { href.split('.md').length<2 ? href=href+'.md' : 0; var out = '<a href="' + window.content.location.href.split('mcnotes/')[0]+"mcnotes/"+"mcnotes/"+ href + '" target="_blank"';}
+	if(!href.match(urlPattern) && !href.match(telPattern)) { href.split('.md').length<2 ? href=href+'.md' : 0; var out = '<a href="' +  window.content.location.href.split('mcnotes/')[0]+"mcnotes/"+"mcnotes/"+ href + '" target="_blank"';}
+    else if (href.match(telPattern)) var out = '<a href="' + href + '" target="_blank"';
     else var out = '<a href="' + href + '" target="_blank"';
 
   if (title) {
@@ -981,12 +982,23 @@ Renderer.prototype.link = function(href, title, text) {
 };
 
 Renderer.prototype.image = function(href, title, text) {
+    if(text){
+      var out = '<figure><img src="' + href + '" alt="' + text + '"';
+  if (title) {
+    out += ' width="' + title + '"';
+  }
+  out += this.options.xhtml ? '/>' : '>';
+  out += '<figcaption>'+text+'</figcaption></figure>'
+    return out;
+    }
+    else{
   var out = '<img src="' + href + '" alt="' + text + '"';
   if (title) {
     out += ' title="' + title + '"';
   }
   out += this.options.xhtml ? '/>' : '>';
   return out;
+  }
 };
 
 /**
@@ -1351,7 +1363,7 @@ marked.defaults = {
   headerPrefix: '',
   renderer: new Renderer,
   xhtml: false,
-  mathjax: false
+  mathjax: true
 };
 
 /**

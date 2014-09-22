@@ -37,14 +37,11 @@ gBrowser.addEventListener('DOMContentLoaded', function load(event) {
 	gBrowser.removeEventListener('DOMContentLoaded', load, false);
 	Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
 .getService(Components.interfaces.mozIJSSubScriptLoader)
-.loadSubScript("chrome://markdownviewer/content/jquery-1.4.3.min.js"); 
-/*
-Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
-.getService(Components.interfaces.mozIJSSubScriptLoader)
 .loadSubScript("chrome://markdownviewer/content/marked.js"); 
-*/
+//Components.classes["@mozilla.org/moz/jssubscript-loader;1"].getService(Components.interfaces.mozIJSSubScriptLoader).loadSubScript("chrome://markdownviewer/content/marked.js"); 
 	markdownviewer.init();
 }, false);
+
 
 if (typeof markdownviewer === 'undefined') {
 
@@ -74,30 +71,31 @@ if (typeof markdownviewer === 'undefined') {
 				//var crurl=document.URL.split('/');crurl.pop();
 				var txt = content.textContent;
 				content.innerHTML = '<!DOCTYPE html>' +
-				                    '<head>' +//'<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> '+
+				                    '<head>' + //'<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />'+
 				                    '    <title></title>' +
 				                    '    <link rel="stylesheet" type="text/css" href="resource://mdskin/bootstrapLite.css">' +
 				                    '    <link rel="stylesheet" type="text/css" href="resource://mdskin/default.min.css">' +
-				                   '    <link rel="stylesheet" type="text/css" href="resource://mdskin/jqmath-0.4.0.css">' +
+				                   '    <link rel="stylesheet" type="text/css" href="resource://mdskin/katex/katex.min.css">' +
 /*				                    ' <script type="application/x-javascript" src="resource://mdskin/jquery-1.4.3.min.js" '+
 				                    ' <script type="application/x-javascript" src="resource://mdskin/jqmath-etc-0.4.0.min.js" '+
 				                    ' <script type="application/x-javascript" src="resource://mdskin/marked.js" '+*/
 				                    '</head>' +
 				                    '<body>' +
-									'<div class="container">'+
+									//'<div class="container">'+
 									//'<a href='+crurl.join('/')+'>UP</a><br>' +
 				                        //M.parseMath(marked(content.textContent)) +
 				                        marked(txt) +
-										'</div>'+
+										//'</div>'+
 									
 				                    '</body>';
-				    try {
+				  /*  try {
 					      var mrkd=document.querySelector(".container");
 						 M.parseMath(mrkd);//M.parseMath(content.textContent);
 						} catch (e) {
 						 var mathmarked = e;
 						}
 						mrkd.innerHTML = mrkd.innerHTML;
+                        */
 				document.title = document.body.firstChild.textContent.substr(0, 50).replace('<', '&lt;').replace('>', '&gt;');// + " - Markdown Viewer";
 
 				var loadjsfile = function(doc, jsfile){
@@ -108,8 +106,8 @@ if (typeof markdownviewer === 'undefined') {
 					head.insertBefore(script, head.firstChild);
 				};
 
-				loadjsfile(document, 'highlight.min.js');
-				loadjsfile(document, 'inithighlight.js');
+				//loadjsfile(document, 'highlight.min.js');
+				//loadjsfile(document, 'inithighlight.js');
 			}
 		}
 	};
